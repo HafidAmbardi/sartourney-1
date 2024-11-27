@@ -4,6 +4,8 @@ import { FormOperations } from "./formOperations";
 import { DarkModeToggle } from "./DarkModeToggle";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+import HowToUsePopup from "./HowToUsePopup"; // Import the new component
+
 const INITIAL_FORM = {
   id: 1, // Use stable ID instead of Date.now()
   ranges: [{ start: 1, end: 1, points: 0 }],
@@ -19,6 +21,7 @@ function HomePage() {
   const { forms, setForms, mode, setMode } = useForms();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [showHowToUse, setShowHowToUse] = useState(false); // State to control the popup
 
   useEffect(() => {
     setMounted(true);
@@ -194,7 +197,7 @@ function HomePage() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col items-center justify-center ${
+      className={`min-h-screen flex flex-col items-center justify-center pt-8 ${
         theme === "dark" ? "bg-gray-800" : "bg-white"
       }`}
     >
@@ -208,7 +211,7 @@ function HomePage() {
       >
         SAR Tourney Scorer
       </h1>
-      <div className="flex space-x-4 mb-4">
+      <div className="flex items-center space-x-4 mb-4">
         <label
           className={`block text-sm font-medium ${
             theme === "dark" ? "text-gray-200" : "text-gray-900"
@@ -231,6 +234,17 @@ function HomePage() {
         </select>
       </div>
       <div className="flex space-x-4 mb-4">
+        <button
+          type="button"
+          className={`p-2 rounded ${
+            theme === "dark"
+              ? "bg-blue-600 text-white hover:bg-blue-700"
+              : "bg-blue-500 text-white hover:bg-blue-600"
+          }`}
+          onClick={() => setShowHowToUse(true)} // Show the popup
+        >
+          How to use
+        </button>
         <button
           type="button"
           className={`p-2 rounded ${
@@ -263,7 +277,7 @@ function HomePage() {
                   ? "bg-gray-700 text-gray-200 border-gray-600"
                   : "bg-white text-gray-900 border-gray-300"
               }`}
-              placeholder="Enter text here..."
+              placeholder="Enter /getplayers output here..."
               value={form.text}
               onChange={(e) => updateForm(form.id, "text", e.target.value)}
             ></textarea>
@@ -478,7 +492,7 @@ function HomePage() {
                     theme === "dark" ? "text-gray-200" : "text-gray-900"
                   }`}
                 >
-                  Pacifist Event
+                  Pacifist Round
                 </label>
                 <div className="flex space-x-2">
                   <label
@@ -633,6 +647,12 @@ function HomePage() {
           )}
         </div>
       ))}
+      {showHowToUse && (
+        <HowToUsePopup
+          theme={theme}
+          onClose={() => setShowHowToUse(false)} // Close the popup
+        />
+      )}
     </div>
   );
 }
