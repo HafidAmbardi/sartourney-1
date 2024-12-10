@@ -11,6 +11,7 @@ export function FormProvider({ children }) {
       configName: "",
       mode: "solo",
       pointsPerKill: 0,
+      killCap: 0,
       pacifist: "no",
       mostKillsBonus: 0,
       importString: "",

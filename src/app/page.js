@@ -338,6 +338,32 @@ function HomePage() {
                     theme === "dark" ? "text-gray-200" : "text-gray-900"
                   }`}
                 >
+                  Kill Cap
+                </label>
+                <input
+                  type="number"
+                  className={`w-full p-2 border rounded ${
+                    theme === "dark"
+                      ? "bg-gray-700 text-gray-200 border-gray-600"
+                      : "bg-white text-gray-900 border-gray-300"
+                  }`}
+                  placeholder="Kill Cap"
+                  value={form.killCap}
+                  onChange={(e) =>
+                    updateForm(
+                      form.id,
+                      "killCap",
+                      parseInt(e.target.value)
+                    )
+                  }
+                />
+              </div>
+              <div>
+                <label
+                  className={`block text-sm font-medium ${
+                    theme === "dark" ? "text-gray-200" : "text-gray-900"
+                  }`}
+                >
                   Points per Placement
                 </label>
                 <div className="flex w-full space-x-2">
