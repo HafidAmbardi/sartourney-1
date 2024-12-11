@@ -149,7 +149,8 @@ export function FormOperations() {
         const kills = parseInt(row.Kills, 10) || 0;
         const placement = parseInt(row.Placement, 10) || 0;
         const pointsPerKill = form.pointsPerKill || 0;
-        const points = kills * pointsPerKill;
+        const killCap = form.killCap || 0;
+        const points = killCap <= 0 ? kills * pointsPerKill : kills > killCap ? killCap * pointsPerKill : kills * pointsPerKill;
 
         // Calculate placement points
         let placementPoints = 0;
@@ -244,15 +245,22 @@ export function FormOperations() {
           playfabID: row.PlayfabID,
           playerName: row.Player,
           kills: kills,
-          killPoints: kills * (form.pointsPerKill || 0),
+          killPoints: (form.killCap || 0) <= 0 ? kills * (form.pointsPerKill || 0) : kills > (form.killCap || 0) ? (form.killCap || 0) * (form.pointsPerKill || 0) : kills * (form.pointsPerKill || 0),
         });
       });
 
       // Calculate points for each team
       const roundResult = [];
       roundTeams.forEach((teamData, squadID) => {
-        const killPoints = teamData.totalKills * (form.pointsPerKill || 0);
+        let killPoints = 0;
         let placementPoints = 0;
+        if ((form.killCap || 0) <= 0) {
+          killPoints = teamData.totalKills * (form.pointsPerKill || 0);
+        } else if (teamData.totalKills > (form.killCap || 0)) {
+          killPoints = (form.killCap || 0) * (form.pointsPerKill || 0);
+        } else {
+          killPoints = teamData.totalKills * (form.pointsPerKill || 0);
+        }
 
         // Add placement points based on best placement
         form.ranges.forEach((range) => {
@@ -760,17 +768,18 @@ export function FormOperations() {
                           >
                             {player.kills}
                           </td>
-                          <td
-                            className={`py-2 px-4 border-b text-green-600 font-semibold ${
-                              theme === "dark"
-                                ? "border-gray-600 text-green-400"
-                                : "border-gray-200"
-                            }`}
-                          >
-                            {player.killPoints}
-                          </td>
                           {playerIndex === 0 && (
                             <>
+                              <td
+                                className={`py-2 px-4 border-b text-green-600 font-semibold ${
+                                  theme === "dark"
+                                    ? "border-gray-600 text-green-400"
+                                    : "border-gray-200"
+                                }`}
+                                rowSpan={team.players.length}
+                              >
+                                {team.killPoints}
+                              </td>
                               <td
                                 className={`py-2 px-4 border-b ${
                                   theme === "dark"

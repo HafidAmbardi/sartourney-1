@@ -124,6 +124,16 @@ function HowToUsePopup({ theme, onClose }) {
             </tr>
             <tr className="border-b">
               <td className="p-2 border">
+                <strong>Kill Cap:</strong>
+              </td>
+              <td className="p-2 border">
+                The maximum number of kills that get scored. Any kill above
+                this threshold will not be awarded points. When set to "0",
+                the cap is disabled.
+              </td>
+            </tr>
+            <tr className="border-b">
+              <td className="p-2 border">
                 <strong>Points per Placement:</strong>
               </td>
               <td className="p-2 border">
